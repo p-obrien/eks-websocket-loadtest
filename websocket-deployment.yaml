@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: websocket-server
-          image: 097324129341.dkr.ecr.us-east-1.amazonaws.com/demo/websocket-server:latest
+          image: 097324129341.dkr.ecr.us-east-1.amazonaws.com/demo/eks-websocket-loadtest:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
