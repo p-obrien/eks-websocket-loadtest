@@ -11,17 +11,11 @@ permissions:
 env:
   AWS_REGION: us-east-1
 jobs:
-  build-and-push:
+  OIDCandECR:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Log in to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
-
+      uses: actions/checkout@v4
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
@@ -29,6 +23,9 @@ jobs:
         role-session-name: GitHubActions
         aws-region: us-east-1
 
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
     - name: Build, tag, and push image
       env:
         ECR_REGISTRY: 097324129341.dkr.ecr.us-east-1.amazonaws.com
