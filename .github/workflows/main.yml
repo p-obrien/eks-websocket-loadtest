@@ -1,43 +1,38 @@
-name: AWS ECR Push
-on:
-   workflow_dispatch:
-   push:
-     branches:
-         - 'main'
-permissions:
- id-token: write
- contents: read
+name: Build and Push to ECR
 
-env:
- AWS_REGION: us-east-1
- ECR_REPOSITORY_URI: 097324129341.dkr.ecr.us-east-1.amazonaws.com/demo/eks-websocket-loadtest
- IMAGE_NAME: websocket-server
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
- OIDCandECR:
-   runs-on: ubuntu-latest
-   steps:
-     - name: Git clone the repository
-       uses: actions/checkout@v4
-     - name: configure aws credentials
-       uses: aws-actions/configure-aws-credentials@v3
-       with:
-         role-to-assume: arn:aws:iam::097324129341:role/GitHubAction-AssumeRoleWithAction
-         role-session-name: samplerolesession
-         aws-region: ${{ env.AWS_REGION }}
-     - name: Login to Amazon ECR
-       id: login-ecr
-       uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
-     - name: Build, tag, and push image to Amazon ECR
-       id: build-image
-       env:
-           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-           IMAGE_TAG: ${{ github.sha }}
-       working-directory: app
-       run: |
-           # Build a docker container and
-           # push it to ECR so that it can
-           # be deployed to ECS.
-           docker build -t $IMAGE_NAME .
-           docker tag $IMAGE_NAME:latest $ECR_REPOSITORY_URI/$IMAGE_NAME:latest
-           docker push $ECR_REPOSITORY_URI/$IMAGE_NAME:latest
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: arn:aws:iam::097324129341:role/GitHubAction-AssumeRoleWithAction
+        role-session-name: GitHubActions
+        aws-region: us-east-1
+
+    - name: Build, tag, and push image
+      env:
+        ECR_REGISTRY: 097324129341.dkr.ecr.us-east-1.amazonaws.com
+        ECR_REPOSITORY: /demo/eks-websocket-loadtest
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
