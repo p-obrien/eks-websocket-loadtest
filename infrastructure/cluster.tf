@@ -21,7 +21,7 @@ module "eks" {
 
   eks_managed_node_groups = {
     nodepool = {
-      instance_types = ["m6g.large"]
+      instance_types = ["m7i.large"]
       capacity_type  = "SPOT"
       min_size       = 1
       max_size       = 2
