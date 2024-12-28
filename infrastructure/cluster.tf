@@ -3,7 +3,7 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.11"
 
-  cluster_name    = "eks-cluster"
+  cluster_name    = var.cluster_name
   cluster_version = "1.30"
 
   enable_cluster_creator_admin_permissions = true
