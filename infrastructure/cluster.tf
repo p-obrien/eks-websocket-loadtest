@@ -21,12 +21,13 @@ module "eks" {
 
   eks_managed_node_groups = {
     nodepool = {
-      instance_types = ["m7i.large"]
+      instance_types = ["m7a.large"]
       capacity_type  = "SPOT"
       min_size       = 1
       max_size       = 2
       desired_size   = 1
-      ami_type       = "AL2023_ARM_64_STANDARD"
+      ami_type       = "AL2023_AMD_64_STANDARD"
+      #ami_type       = "AL2023_ARM_64_STANDARD"
     }
   }
 
