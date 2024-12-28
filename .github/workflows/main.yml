@@ -2,8 +2,11 @@ name: Build and Push to ECR
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'app/**'
+  pull_request:
+    paths:
+      - 'app/**'
 
 permissions:
   contents: read
