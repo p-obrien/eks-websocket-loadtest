@@ -31,7 +31,7 @@ jobs:
         ECR_REGISTRY: 097324129341.dkr.ecr.us-east-1.amazonaws.com
         ECR_REPOSITORY: demo/eks-websocket-loadtest
         IMAGE_TAG: latest
-        working-directory: app
+      working-directory: app
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
