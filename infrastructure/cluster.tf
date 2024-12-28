@@ -26,7 +26,7 @@ module "eks" {
       min_size       = 1
       max_size       = 2
       desired_size   = 1
-      ami_type       = "AL2023_AMD_64_STANDARD"
+      ami_type       = "AL2023_x86_64_STANDARD"
       #ami_type       = "AL2023_ARM_64_STANDARD"
     }
   }
