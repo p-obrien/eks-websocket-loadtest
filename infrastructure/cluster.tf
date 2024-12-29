@@ -14,6 +14,10 @@ module "eks" {
     eks-pod-identity-agent = {}
     kube-proxy             = {}
     vpc-cni                = {}
+    container-insights = {
+      addon_name        = "cloudwatch-agent" # Specify the addon for Container Insights
+      resolve_conflicts = "OVERWRITE"        # Optional, resolves existing conflicts
+    }
   }
 
   vpc_id     = module.vpc.vpc_id
@@ -28,10 +32,15 @@ module "eks" {
       desired_size   = 1
       ami_type       = "AL2023_x86_64_STANDARD"
       #ami_type       = "AL2023_ARM_64_STANDARD"
+
+      iam_role_additional_policies = {
+        cloudwatch_agent_policy = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+      }
     }
   }
 
 }
+
 
 output "configure_kubectl" {
   description = "Configure kubectl: make sure you're logged in with the correct AWS profile and run the following command to update your kubeconfig"

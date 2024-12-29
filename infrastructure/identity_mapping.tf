@@ -25,10 +25,10 @@ resource "aws_iam_role_policy_attachment" "attach_bedrock" {
 }
 
 resource "aws_eks_pod_identity_association" "eks_service_account" {
-  cluster_name    = "eks-cluster"
+  cluster_name    = var.cluster_name
   namespace       = "default"
   service_account = "eks-service-account"
   role_arn        = aws_iam_role.eks-pod-identity.arn
-  depends_on = [ module.eks ]
+  depends_on      = [module.eks]
 }
 
