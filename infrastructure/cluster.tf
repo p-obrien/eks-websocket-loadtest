@@ -14,10 +14,6 @@ module "eks" {
     eks-pod-identity-agent = {}
     kube-proxy             = {}
     vpc-cni                = {}
-    container-insights = {
-      addon_name        = "cloudwatch-agent" # Specify the addon for Container Insights
-      resolve_conflicts = "OVERWRITE"        # Optional, resolves existing conflicts
-    }
   }
 
   vpc_id     = module.vpc.vpc_id
@@ -41,6 +37,14 @@ module "eks" {
 
 }
 
+resource "aws_eks_addon" "amazon_cloudwatch_observability" {
+
+  cluster_name  = var.cluster_name
+  addon_name    = "amazon-cloudwatch-observability"
+  addon_version = "v2.6.0-eksbuild.1"
+
+  #  configuration_values = local.amazon_cloudwatch_observability_config
+}
 
 output "configure_kubectl" {
   description = "Configure kubectl: make sure you're logged in with the correct AWS profile and run the following command to update your kubeconfig"
