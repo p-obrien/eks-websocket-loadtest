@@ -1,0 +1,12 @@
+config:
+  target: "ws://k8s-default-httpd-d658fc3013-2ef1852be2e1cf72.elb.us-east-1.amazonaws.com/ws"
+  phases:
+    - duration: 300
+      arrivalRate: 100
+      rampTo: 1000
+scenarios:
+  - engine: "ws"
+    flow:
+      - send: { text: "Hello, WebSocket!" }
+      - think: 1
+      - send: { text: "Echo this back" }

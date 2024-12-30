@@ -4,7 +4,7 @@ module "eks" {
   version = "~> 20.11"
 
   cluster_name    = var.cluster_name
-  cluster_version = "1.30"
+  cluster_version = "1.31"
 
   enable_cluster_creator_admin_permissions = true
   cluster_endpoint_public_access           = true
@@ -27,7 +27,6 @@ module "eks" {
       max_size       = 2
       desired_size   = 1
       ami_type       = "AL2023_x86_64_STANDARD"
-      #ami_type       = "AL2023_ARM_64_STANDARD"
 
       iam_role_additional_policies = {
         cloudwatch_agent_policy = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
