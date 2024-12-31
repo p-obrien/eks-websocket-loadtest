@@ -27,22 +27,24 @@ module "eks" {
       max_size       = 2
       desired_size   = 1
       ami_type       = "AL2023_x86_64_STANDARD"
-
-      iam_role_additional_policies = {
-        cloudwatch_agent_policy = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
-      }
     }
   }
-
 }
 
-resource "aws_eks_addon" "amazon_cloudwatch_observability" {
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
+  token                  = data.aws_eks_cluster_auth.eks.token
+}
 
-  cluster_name  = var.cluster_name
-  addon_name    = "amazon-cloudwatch-observability"
-  addon_version = "v2.6.0-eksbuild.1"
+data "aws_eks_cluster_auth" "eks" {
+  name = var.cluster_name
+}
 
-  #  configuration_values = local.amazon_cloudwatch_observability_config
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+  }
 }
 
 output "configure_kubectl" {
