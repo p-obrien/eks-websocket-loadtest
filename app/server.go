@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var upgrader = websocket.Upgrader{
@@ -55,6 +56,8 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+
+	http.Handle("/metrics", promhttp.Handler())
 
 	http.HandleFunc("/ws", handleWebSocket)
 
